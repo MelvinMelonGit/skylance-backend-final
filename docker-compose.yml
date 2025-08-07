@@ -29,4 +29,4 @@ services:
       - db
 
 volumes:
-  db_data:
+  dbdata:
