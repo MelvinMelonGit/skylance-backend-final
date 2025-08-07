@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using skylance_backend.Data;
 using skylance_backend.Enum;
 
-namespace skylance_backend.Services
+/*namespace skylance_backend.Services
 {
     /// Background service that periodically looks for bookings
     /// without a Prediction and calls the MLService to fill them in.
@@ -62,4 +62,4 @@ namespace skylance_backend.Services
             }
         }
     }
-}
+}*/

@@ -3,7 +3,7 @@ using skylance_backend.Services;
 using System;
 using System.Threading.Tasks;
 
-namespace skylance_backend.Controllers
+/*namespace skylance_backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -21,7 +21,7 @@ namespace skylance_backend.Controllers
         /// Python handles feature extraction, inference, and write‐back.
 
         /// <returns>{ "updated": int }</returns>
-        [HttpPost("all")]
+       /* [HttpPost("all")]
         public async Task<IActionResult> PredictAll()
         {
             var result = await _mlService.CallBulkAsync();
@@ -43,4 +43,4 @@ namespace skylance_backend.Controllers
             });
         }
     }
-}
+}*/

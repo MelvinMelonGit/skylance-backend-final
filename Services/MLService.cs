@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace skylance_backend.Services
+/*namespace skylance_backend.Services
 {
     // MLService.cs
     public class MLService
@@ -56,4 +56,4 @@ namespace skylance_backend.Services
             public int prediction { get; set; }
         }
     }
-}
+}*/

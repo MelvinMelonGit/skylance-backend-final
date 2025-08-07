@@ -19,6 +19,9 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 
+// Add environment variables so they can override appsettings.json
+builder.Configuration.AddEnvironmentVariables();
+
 // Remove duplicate AddDbContext and consolidate with options
 
 builder.Services.AddDbContext<SkylanceDbContext>(options =>
@@ -35,14 +38,14 @@ builder.Services.Configure<FastApi>(
 );
 
 // Register MLService, pulling BaseUrl from the bound options
-builder.Services.AddHttpClient<MLService>((sp, client) =>
+/*builder.Services.AddHttpClient<MLService>((sp, client) =>
 {
     // resolve the options
     var opts = sp.GetRequiredService<IOptions<FastApi>>().Value;
     client.BaseAddress = new Uri(opts.BaseUrl);
-});
+});*/
 // Register the background worker to catch and update bookings without prediction
-builder.Services.AddHostedService<BookingPredictionWorker>();
+//builder.Services.AddHostedService<BookingPredictionWorker>();
 
 builder.Services.AddControllers();
 
@@ -77,13 +80,16 @@ app.Run();
 // init our database
 void initDB()
 {
-// create the environment to retrieve our database context
     using (var scope = app.Services.CreateScope())
     {
-// get database context from DI-container
         var ctx = scope.ServiceProvider.GetRequiredService<SkylanceDbContext>();
-        if (! ctx.Database.CanConnect())
-            ctx.Database.EnsureCreated(); // create database
+
+        if (!ctx.Database.CanConnect())
+        {
+            Console.WriteLine("Database not reachable. Attempting to migrate...");
+        }
+
+        ctx.Database.Migrate(); // Applies pending migrations
     }
 }
 

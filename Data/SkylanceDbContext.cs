@@ -5,16 +5,6 @@ namespace skylance_backend.Data;
 
 public class SkylanceDbContext : DbContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseMySql(
-            // provides database connection-string
-            "server=localhost;user=root;password=password;database=skylance;",
-            new MySqlServerVersion(new Version(8, 0, 36))
-        );
-        optionsBuilder.UseLazyLoadingProxies();
-    }
-
     public SkylanceDbContext(DbContextOptions<SkylanceDbContext> options)
         : base(options) { }
     
