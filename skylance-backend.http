@@ -1,0 +1,6 @@
+@skylance_backend_HostAddress = http://localhost:5035
+
+GET {{skylance_backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,203 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using skylance_backend.Data;
+using skylance_backend.Models;
+
+namespace skylance_backend.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class Populate_FlightDetailController : Controller
+    {
+        private readonly SkylanceDbContext db;
+        public Populate_FlightDetailController(SkylanceDbContext db)
+        {
+            this.db = db;
+        }
+
+        [HttpPost]
+        public IActionResult Populate()
+        {
+            if (db.FlightDetails.Any())
+                return BadRequest("Data already seeded.");
+
+            var aircrafts = db.Aircraft.ToDictionary(ac => ac.FlightNumber, ac => ac);
+
+            var airports = db.Airports.ToDictionary(ap => ap.IataCode, ap => ap);
+
+            List<FlightDetail> flightDetailList = new List<FlightDetail>
+            {                
+                new FlightDetail {
+                    Aircraft = aircrafts["SQ322"],
+                    OriginAirport = airports["SIN"],
+                    DestinationAirport = airports["CBR"],
+                    DepartureTime = new DateTime(2025, 8, 20, 8, 0, 0),
+                    ArrivalTime = new DateTime(2025, 8, 21, 16, 30, 0),
+                    IsHoliday = false,
+                    FlightStatus = "Scheduled",
+                    CheckInCount = 190,
+                    SeatsSold = 140,
+                    Distance=6200,
+                    NumberOfCrew = 6,
+                    Prediction = null
+                },
+
+                new FlightDetail
+                {
+                    Aircraft = aircrafts["JL1"],
+                    OriginAirport = airports["NRT"],
+                    DestinationAirport = airports["SIN"],
+                    DepartureTime = new DateTime(2025, 8, 6, 22, 0, 0),
+                    ArrivalTime = new DateTime(2025, 8, 7, 7, 0, 0),
+                    IsHoliday = true,
+                    FlightStatus = "Scheduled",
+                    CheckInCount = 80,
+                    SeatsSold = 85,
+                    Distance=5300,
+                    NumberOfCrew = 5,
+                    Prediction = null
+                },
+
+                new FlightDetail
+                {
+                    Aircraft = aircrafts["MH1"],
+                    OriginAirport = airports["KUL"],
+                    DestinationAirport = airports["ICN"],
+                    DepartureTime = new DateTime(2025, 8, 7, 15, 30, 0),
+                    ArrivalTime = new DateTime(2025, 8, 7, 20, 15, 0),
+                    IsHoliday = false,
+                    FlightStatus = "Landed",
+                    CheckInCount = 100,
+                    SeatsSold = 110,
+                    Distance=4500,
+                    NumberOfCrew = 15,
+                    Prediction = null
+                },
+
+                new FlightDetail
+                {
+                    Aircraft = aircrafts["KE85"],
+                    OriginAirport = airports["ICN"],
+                    DestinationAirport = airports["CBR"],
+                    DepartureTime = new DateTime(2025, 8, 8, 6, 45, 0),
+                    ArrivalTime = new DateTime(2025, 8, 8, 14, 30, 0),
+                    IsHoliday = false,
+                    FlightStatus = "Scheduled",
+                    CheckInCount = 0,
+                    SeatsSold = 0,
+                    Distance=7800,
+                    NumberOfCrew = 14,
+                    Prediction = null
+                },
+
+                new FlightDetail {
+                    Aircraft = aircrafts["QF1"],
+                    OriginAirport = airports["CBR"],
+                    DestinationAirport = airports["SIN"],
+                    DepartureTime = new DateTime(2025, 8, 9, 10, 15, 0),
+                    ArrivalTime = new DateTime(2025, 8, 9, 16, 45, 0),
+                    IsHoliday = true,
+                    FlightStatus = "Scheduled",
+                    CheckInCount = 130,
+                    SeatsSold = 145,
+                    Distance=6200,
+                    NumberOfCrew = 4,
+                    Prediction = null
+                },
+                
+                new FlightDetail {
+                    Aircraft = aircrafts["SQ12"],
+                    OriginAirport = airports["SIN"],
+                    DestinationAirport = airports["CBR"],
+                    DepartureTime = new DateTime(2025, 8, 5, 8, 0, 0),
+                    ArrivalTime = new DateTime(2025, 8, 5, 17, 0, 0),
+                    IsHoliday = false,
+                    FlightStatus = "Scheduled",
+                    CheckInCount = 200,
+                    SeatsSold = 250,
+                    Distance = 6300,
+                    NumberOfCrew = 22,
+                    Prediction = null
+                },
+
+                new FlightDetail {
+                    Aircraft = aircrafts["QF93"],
+                    OriginAirport = airports["CBR"],
+                    DestinationAirport = airports["AUH"],
+                    DepartureTime = new DateTime(2025, 8, 6, 21, 45, 0),
+                    ArrivalTime = new DateTime(2025, 8, 7, 5, 30, 0),
+                    IsHoliday = false,
+                    FlightStatus = "Scheduled",
+                    CheckInCount = 180,
+                    SeatsSold = 220,
+                    Distance = 12000,
+                    NumberOfCrew = 13,
+                    Prediction = null
+                },
+
+                new FlightDetail {
+                    Aircraft = aircrafts["EY101"],
+                    OriginAirport = airports["AUH"],
+                    DestinationAirport = airports["ZRH"],
+                    DepartureTime = new DateTime(2025, 8, 7, 2, 0, 0),
+                    ArrivalTime = new DateTime(2025, 8, 7, 7, 30, 0),
+                    IsHoliday = false,
+                    FlightStatus = "Landed",
+                    CheckInCount = 400,
+                    SeatsSold = 450,
+                    Distance = 4800,
+                    NumberOfCrew = 5,
+                    Prediction = null
+                },
+
+                new FlightDetail {
+                    Aircraft = aircrafts["LX38"],
+                    OriginAirport = airports["ZRH"],
+                    DestinationAirport = airports["HAN"],
+                    DepartureTime = new DateTime(2025, 8, 8, 13, 0, 0),
+                    ArrivalTime = new DateTime(2025, 8, 9, 6, 15, 0),
+                    IsHoliday = true,
+                    FlightStatus = "Scheduled",
+                    CheckInCount = 220,
+                    SeatsSold = 230,
+                    Distance = 9200,
+                    NumberOfCrew = 4,
+                    Prediction = null
+                },
+
+                new FlightDetail {
+                    Aircraft = aircrafts["VN50"],
+                    OriginAirport = airports["HAN"],
+                    DestinationAirport = airports["SIN"],
+                    DepartureTime = new DateTime(2025, 8, 9, 11, 30, 0),
+                    ArrivalTime = new DateTime(2025, 8, 9, 14, 15, 0),
+                    IsHoliday = false,
+                    FlightStatus = "Scheduled",
+                    CheckInCount = 200,
+                    SeatsSold = 250,
+                    Distance = 2200,
+                    NumberOfCrew = 10,
+                    Prediction = null
+                }
+
+            };
+
+                db.FlightDetails.AddRange(flightDetailList);
+                db.SaveChanges();
+
+                return Ok("Flight Details seeded successfully.");
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
