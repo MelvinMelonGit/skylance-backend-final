@@ -9,6 +9,6 @@ public class TestingController : Controller
     [HttpGet("hello")]
     public IActionResult GetHello()
     {
-        return Ok(new { message = "Hello from your API!" });
+        return Ok(new { message = "Hello from your API! Deployed!" });
     }
 }
