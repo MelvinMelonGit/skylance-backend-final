@@ -12,6 +12,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        
+      - name: Run Semgrep SAST Scan (SARIF output SAST)
+        run: |
+          pip install semgrep
+          semgrep --config auto --sarif > semgrep.sarif
+    
+      - name: Upload Semgrep SARIF results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: semgrep.sarif
 
       - name: Run OWASP Dependency-Check (SCA)
         uses: dependency-check/Dependency-Check_Action@main
@@ -53,7 +63,7 @@ jobs:
             docker-compose down
             docker-compose up -d
 
-      - name: Run OWASP ZAP Baseline Scan
+      - name: Run OWASP ZAP Baseline Scan (DAST)
         run: |
           mkdir -p zap-temp
           docker run --rm -i \
