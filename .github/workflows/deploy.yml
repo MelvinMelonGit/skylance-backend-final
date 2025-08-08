@@ -60,7 +60,7 @@ jobs:
             -v ${{ github.workspace }}/zap-temp:/zap/wrk/:rw \
             --user root \
             zaproxy/zap-stable zap-baseline.py \
-            -t "http://${{ secrets.DROPLET_IP }}:5035/api/Testing/hello" \
+            -t "http://${{ secrets.DROPLET_IP }}:5035" \
             -r /zap/wrk/zap_baseline_report.html \
             -J /zap/wrk/zap_baseline_report.json \
             -T 10
