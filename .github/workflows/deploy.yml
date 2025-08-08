@@ -53,6 +53,19 @@ jobs:
             docker-compose down
             docker-compose up -d
 
+      - name: Wait for app to be ready
+        run: |
+          for i in {1..10}; do
+            if curl -s --head --request GET http://${{ secrets.DROPLET_IP }} | grep "200 OK" > /dev/null; then
+              echo "App is up!"
+              exit 0
+            fi
+            echo "Waiting for app..."
+            sleep 10
+          done
+          echo "App did not start in time"
+          exit 1
+
       - name: Run OWASP ZAP Baseline Scan (DAST)
         uses: zaproxy/action-baseline@v0.11.0
         with:
