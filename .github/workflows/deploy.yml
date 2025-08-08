@@ -52,21 +52,6 @@ jobs:
             docker pull tallmelon/skylance-backend-final:latest
             docker-compose down
             docker-compose up -d
-
-      - name: Wait for app to be ready
-        run: |
-          for i in {1..20}; do
-            status_code=$(curl -skL -o /dev/null -w "%{http_code}" http://your-app-url/)
-            if [[ "$status_code" =~ ^2[0-9]{2}$ ]]; then
-              echo "App is up! (Status: $status_code)"
-              exit 0
-            fi
-            echo "Waiting for app... (Last status: $status_code)"
-            sleep 10
-          done
-          echo "App did not start in time, continuing anyway"
-          exit 0
-        shell: bash
     
       - name: Run OWASP ZAP Baseline Scan
         run: |
