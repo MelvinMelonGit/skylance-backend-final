@@ -53,7 +53,7 @@ jobs:
             docker-compose down
             docker-compose up -d
 
-      - name: Run Nikto Scan (DAST)
+      - name: Run Wapiti Scan (DAST)
         run: |
-          docker run --rm projectdiscovery/nikto -h http://${{ secrets.DROPLET_IP }}
-        continue-on-error: true
+          docker run --rm wapiti/wapiti -u http://${{ secrets.DROPLET_IP }}
+          continue-on-error: true
