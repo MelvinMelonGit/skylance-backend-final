@@ -53,7 +53,7 @@ jobs:
             docker-compose down
             docker-compose up -d
 
-      - name: Run Wapiti Scan (DAST)
+      - name: Run Arachni Scan (DAST)
         run: |
-          docker run --rm wapiti/wapiti -u http://${{ secrets.DROPLET_IP }}
-          continue-on-error: true
+          docker run --rm arachni/arachni http://${{ secrets.DROPLET_IP }}
+        continue-on-error: true
