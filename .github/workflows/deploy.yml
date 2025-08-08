@@ -65,13 +65,14 @@ jobs:
             sleep 10
           done
           echo "App did not start in time, continuing anyway"
-        continue-on-error: true
-
-      - name: Run OWASP ZAP Baseline Scan (DAST)
+          exit 0
+        shell: /usr/bin/bash
+    
+      - name: Run OWASP ZAP Baseline Scan
         run: |
           docker run --rm -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -t http://${{ secrets.DROPLET_IP }} -r zap_report.html
         continue-on-error: true
-
+    
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         with:
