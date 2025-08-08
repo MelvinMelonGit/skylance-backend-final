@@ -7,6 +7,9 @@ on:
 
 jobs:
   build-and-deploy:
+    permissions:
+      actions: read
+      security-events: write
     runs-on: ubuntu-latest
 
     steps:
@@ -19,9 +22,10 @@ jobs:
           semgrep --config auto --sarif > semgrep.sarif
     
       - name: Upload Semgrep SARIF results
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: semgrep.sarif
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run OWASP Dependency-Check (SCA)
         uses: dependency-check/Dependency-Check_Action@main
