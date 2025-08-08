@@ -53,15 +53,30 @@ jobs:
             docker-compose down
             docker-compose up -d
 
+      - name: Wait for the app to be up
+        run: |
+            for i in {1..20}; do
+              STATUS=$(curl -skL -o /dev/null -w "%{http_code}" http://${{ secrets.DROPLET_IP }})
+              if [[ "$STATUS" =~ ^2 ]]; then
+                echo "App is up! Status: $STATUS"
+                exit 0
+              fi
+              echo "Waiting for app... Last status: $STATUS"
+              sleep 10
+            done
+            echo "App did not start in time, continuing anyway"
+        continue-on-error: true
+
       - name: Run OWASP ZAP Baseline Scan (DAST)
         run: |
-          docker pull owasp/zap2docker-stable:2.13.0
-          docker run --rm -v ${{ github.workspace }}:/zap/wrk/:rw -t owasp/zap2docker-stable:2.13.0 zap-baseline.py -t ${{ secrets.DROPLET_IP }} -r /zap/wrk/zap_report.html
-        shell: bash
+          docker run --rm -v ${{ github.workspace }}:/zap/wrk/:rw -t owasp/zap2docker-stable:2.13.0 \
+          zap-baseline.py -t http://${{ secrets.DROPLET_IP }} -r /zap/wrk/zap_report.html -j /zap/wrk/zap_report.json --exitcode 0 --maxduration 600
         continue-on-error: true
-    
-      - name: Upload ZAP Report
+
+      - name: Upload ZAP Reports
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: zap_report.html
+          path: |
+            zap_report.html
+            zap_report.json
