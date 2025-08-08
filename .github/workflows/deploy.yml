@@ -58,7 +58,7 @@ jobs:
           docker pull owasp/zap2docker-stable:2.13.0
           docker run --rm -v ${{ github.workspace }}:/zap/wrk/:rw -t owasp/zap2docker-stable:2.13.0 zap-baseline.py -t http://your-app-url -r zap_report.html
         shell: bash
-        continue-on-error: trues
+        continue-on-error: true
     
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
