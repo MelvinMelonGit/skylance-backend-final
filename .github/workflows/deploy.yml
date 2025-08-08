@@ -56,15 +56,24 @@ jobs:
       - name: Run OWASP ZAP Baseline Scan
         run: |
           mkdir -p zap-temp
-          docker pull zaproxy/zap-stable
           docker run -i \
-          -v $PWD/zap-temp:/zap/wrk/:rw \
-          --user root \
-          zaproxy/zap-stable zap-baseline.py -t "http://${{ secrets.DROPLET_IP }}" -r /zap/wrk/zap_baseline_report.html --exitcode 0 --maxduration 600
+            -v ${{ github.workspace }}/zap-temp:/zap/wrk/:rw \
+            --user root \
+            zaproxy/zap-stable zap-baseline.py \
+            -t "http://${{ secrets.DROPLET_IP }}" \
+            -r /zap/wrk/zap_baseline_report.html \
+            -J /zap/wrk/zap_baseline_report.json \
+            -T 10
         continue-on-error: true
 
-      - name: Upload ZAP Report
+      - name: Upload ZAP Reports
         uses: actions/upload-artifact@v4
         with:
-          name: zap-report
-          path: zap_baseline_report.html
+          name: zap-report-html
+          path: zap-temp/zap_baseline_report.html
+
+      - name: Upload ZAP JSON Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report-json
+          path: zap-temp/zap_baseline_report.json
