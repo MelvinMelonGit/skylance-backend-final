@@ -55,10 +55,10 @@ jobs:
 
       - name: Run OWASP ZAP Baseline Scan
         run: |
-          docker pull zaproxy/zap2docker-stable:2.13.0
+          docker pull zaproxy/zap-stable
           docker run -i \
             -v "$PWD":/zap/wrk/:rw \
-            zaproxy/zap2docker-stable:2.13.0 \
+            zaproxy/zap-stable \
             zap-baseline.py -t "http://${{ secrets.DROPLET_IP }}" -r /zap/wrk/zap_baseline_report.html -j /zap/wrk/zap_baseline_report.json --exitcode 0 --maxduration 600
         continue-on-error: true
 
