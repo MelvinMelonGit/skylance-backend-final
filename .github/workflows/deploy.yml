@@ -56,7 +56,7 @@ jobs:
       - name: Run OWASP ZAP Baseline Scan
         run: |
           mkdir -p zap-temp
-          docker run -i \
+          docker run --rm -i \
             -v ${{ github.workspace }}/zap-temp:/zap/wrk/:rw \
             --user root \
             zaproxy/zap-stable zap-baseline.py \
