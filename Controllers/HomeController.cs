@@ -9,6 +9,6 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult GetHello()
     {
-        return Ok(new { message = "Hello world! deployed!" });
+        return Ok(new { message = "Hello world!" });
     }
 }
