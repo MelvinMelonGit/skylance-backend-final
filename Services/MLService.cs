@@ -26,7 +26,7 @@ namespace skylance_backend.Services
         public async Task<BulkResult> CallBulkAsync()
         {
             using var content = new StringContent("{}", Encoding.UTF8, "application/json");
-            var resp = await _httpClient.PostAsync("/predict", content);
+            var resp = await _httpClient.PostAsync("/passenger/predict", content);
             resp.EnsureSuccessStatusCode();
 
             var json = await resp.Content.ReadAsStringAsync();
@@ -39,7 +39,7 @@ namespace skylance_backend.Services
         public async Task<SingleResult> CallSingleAsync(string bookingId)
         {
             using var content = new StringContent("{}", Encoding.UTF8, "application/json");
-            var resp = await _httpClient.PostAsync($"/predict/{bookingId}", content);
+            var resp = await _httpClient.PostAsync($"/passenger/predict/{bookingId}", content);
             resp.EnsureSuccessStatusCode();
 
             var json = await resp.Content.ReadAsStringAsync();
@@ -52,7 +52,7 @@ namespace skylance_backend.Services
         public async Task<BulkResult> CallBulkFlightAsync()
         {
             using var content = new StringContent("{}", Encoding.UTF8, "application/json");
-            var resp = await _httpClient.PostAsync("/predict_f", content);
+            var resp = await _httpClient.PostAsync("/flight/predict_f", content);
             resp.EnsureSuccessStatusCode();
 
             var json = await resp.Content.ReadAsStringAsync();
@@ -65,7 +65,7 @@ namespace skylance_backend.Services
         public async Task<SingleFlightResult> CallSingleFlightAsync(int flightId)
         {
             using var content = new StringContent("{}", Encoding.UTF8, "application/json");
-            var resp = await _httpClient.PostAsync($"/predict_f/{flightId}", content);
+            var resp = await _httpClient.PostAsync($"/flight/predict_f/{flightId}", content);
             resp.EnsureSuccessStatusCode();
 
             var json = await resp.Content.ReadAsStringAsync();
