@@ -8,7 +8,7 @@ using System;
 namespace skylance_backend.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/webflights")]
     public class Web_FlightsController : ControllerBase
     {
         private readonly SkylanceDbContext db;
