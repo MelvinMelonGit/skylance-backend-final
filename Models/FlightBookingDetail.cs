@@ -1,6 +1,7 @@
 using skylance_backend.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Transactions;
 
 namespace skylance_backend.Models;
 
@@ -21,8 +22,10 @@ public class FlightBookingDetail
 
     [Required]
     public required double BaggageAllowance { get; set; }
-
-    public TravelPurpose? TravelPurpose { get; set; }    
+    public double BaggageChecked { get; set; }
+    public DateTime BookingDate { get; set; }
+    public TravelPurpose? TravelPurpose { get; set; }
+    public Class? Class { get; set; }
 
     [MaxLength(50)]
     public virtual Seat? SeatNumber { get; set; }
@@ -39,7 +42,6 @@ public class FlightBookingDetail
     public required int Fareamount { get; set; }
 
     public Prediction? Prediction { get; set; }
+    public SpecialRequest? SpecialRequest { get; set; }
 
 }
-
-

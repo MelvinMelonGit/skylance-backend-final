@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using skylance_backend.Data;
 using skylance_backend.Services;
 using System;
 using System.Threading.Tasks;
 
-/*namespace skylance_backend.Controllers
+namespace skylance_backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -21,7 +22,7 @@ using System.Threading.Tasks;
         /// Python handles feature extraction, inference, and write‐back.
 
         /// <returns>{ "updated": int }</returns>
-       /* [HttpPost("all")]
+        [HttpPost("all")]
         public async Task<IActionResult> PredictAll()
         {
             var result = await _mlService.CallBulkAsync();
@@ -43,4 +44,4 @@ using System.Threading.Tasks;
             });
         }
     }
-}*/
+}

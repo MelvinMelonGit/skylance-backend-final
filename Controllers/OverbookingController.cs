@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using skylance_backend.Attributes;
 using skylance_backend.Data;
 using skylance_backend.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using skylance_backend.Services;
 namespace skylance_backend.Controllers
 {
     [ApiController]
@@ -12,24 +13,28 @@ namespace skylance_backend.Controllers
     {
         private readonly SkylanceDbContext _db;
 
+
         public OverbookingController(SkylanceDbContext db)
         {
             _db = db;
+
         }
         [HttpGet("overbooking")]
         public async Task<IActionResult> GetOverbookingDetail([FromQuery] string flightBookingDetailId)
         {
-            var flightBookingDetail = _db.FlightBookingDetails
+            var flightBookingDetail = await _db.FlightBookingDetails
                 .Include(b => b.FlightDetail)
                 .Include(b => b.BookingDetail)
                     .ThenInclude(x => x.AppUser)
-                .FirstOrDefault(b => b.Id == flightBookingDetailId);
+                .FirstOrDefaultAsync(b => b.Id == flightBookingDetailId);
             
             if (flightBookingDetail == null)
             {
                 return NotFound();
             }
+            var distance = flightBookingDetail.FlightDetail.Distance;
             double compensation = CalculateCompensation(flightBookingDetail.FlightDetail.Distance);
+         
             var overbooking = new OverbookingDetail
             {
                 Id = Guid.NewGuid().ToString(),
@@ -38,7 +43,7 @@ namespace skylance_backend.Controllers
                 NewFlightBookingDetail = null,
                 NewFlightBookingDetailId = null, 
                 IsRebooking = false,
-                FinalCompensationAmount = compensation
+                FinalCompensationAmount =CalculateCompensation(distance)
             };
 
             await _db.OverbookingDetails.AddAsync(overbooking);

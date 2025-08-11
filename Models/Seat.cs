@@ -13,4 +13,3 @@ namespace skylance_backend.Models
         public bool IsAssigned { get; set; } = false;
     }
 }
-

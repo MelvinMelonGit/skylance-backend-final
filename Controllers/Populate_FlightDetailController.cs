@@ -38,7 +38,8 @@ namespace skylance_backend.Controllers
                     SeatsSold = 140,
                     Distance=6200,
                     NumberOfCrew = 6,
-                    Prediction = null
+                    Prediction = null,
+                    Probability = null
                 },
 
                 new FlightDetail
@@ -54,7 +55,8 @@ namespace skylance_backend.Controllers
                     SeatsSold = 85,
                     Distance=5300,
                     NumberOfCrew = 5,
-                    Prediction = null
+                    Prediction = null,
+                    Probability = null
                 },
 
                 new FlightDetail
@@ -70,7 +72,8 @@ namespace skylance_backend.Controllers
                     SeatsSold = 110,
                     Distance=4500,
                     NumberOfCrew = 15,
-                    Prediction = null
+                    Prediction = null,
+                    Probability = null
                 },
 
                 new FlightDetail
@@ -78,15 +81,16 @@ namespace skylance_backend.Controllers
                     Aircraft = aircrafts["KE85"],
                     OriginAirport = airports["ICN"],
                     DestinationAirport = airports["CBR"],
-                    DepartureTime = new DateTime(2025, 8, 8, 6, 45, 0),
-                    ArrivalTime = new DateTime(2025, 8, 8, 14, 30, 0),
+                    DepartureTime = new DateTime(2025, 9, 8, 6, 45, 0),
+                    ArrivalTime = new DateTime(2025, 9, 9, 14, 30, 0),
                     IsHoliday = false,
                     FlightStatus = "Scheduled",
-                    CheckInCount = 0,
+                    CheckInCount = 330,
                     SeatsSold = 0,
                     Distance=7800,
                     NumberOfCrew = 14,
-                    Prediction = null
+                    Prediction = null,
+                    Probability = null
                 },
 
                 new FlightDetail {
@@ -101,7 +105,8 @@ namespace skylance_backend.Controllers
                     SeatsSold = 145,
                     Distance=6200,
                     NumberOfCrew = 4,
-                    Prediction = null
+                    Prediction = null,
+                    Probability = null
                 },
                 
                 new FlightDetail {
@@ -116,7 +121,8 @@ namespace skylance_backend.Controllers
                     SeatsSold = 250,
                     Distance = 6300,
                     NumberOfCrew = 22,
-                    Prediction = null
+                    Prediction = null,
+                    Probability = null
                 },
 
                 new FlightDetail {
@@ -131,7 +137,8 @@ namespace skylance_backend.Controllers
                     SeatsSold = 220,
                     Distance = 12000,
                     NumberOfCrew = 13,
-                    Prediction = null
+                    Prediction = null,
+                    Probability = null
                 },
 
                 new FlightDetail {
@@ -146,7 +153,8 @@ namespace skylance_backend.Controllers
                     SeatsSold = 450,
                     Distance = 4800,
                     NumberOfCrew = 5,
-                    Prediction = null
+                    Prediction = null,
+                    Probability = null
                 },
 
                 new FlightDetail {
@@ -161,7 +169,8 @@ namespace skylance_backend.Controllers
                     SeatsSold = 230,
                     Distance = 9200,
                     NumberOfCrew = 4,
-                    Prediction = null
+                    Prediction = null,
+                    Probability = null
                 },
 
                 new FlightDetail {
@@ -176,8 +185,137 @@ namespace skylance_backend.Controllers
                     SeatsSold = 250,
                     Distance = 2200,
                     NumberOfCrew = 10,
-                    Prediction = null
-                }
+                    Prediction = null,
+                    Probability = null
+                },
+
+                new FlightDetail {
+                    Aircraft = aircrafts["KE621"],
+                    OriginAirport = airports["ICN"],
+                    DestinationAirport = airports["SIN"],
+                    DepartureTime = new DateTime(2025, 8, 11, 13, 30, 0),  // departed before 11 Aug 14:00
+                    ArrivalTime = new DateTime(2025, 8, 11, 18, 0, 0),      // arriving after 11 Aug 15:00
+                    IsHoliday = false,
+                    FlightStatus = "In-Flight",
+                    CheckInCount = 150,
+                    SeatsSold = 140,
+                    Distance = 5300,
+                    NumberOfCrew = 8,
+                    Prediction = null,
+                    Probability = null
+                },
+
+                new FlightDetail {
+                    Aircraft = aircrafts["SQ26"],
+                    OriginAirport = airports["SIN"],
+                    DestinationAirport = airports["ZRH"],
+                    DepartureTime = new DateTime(2025, 8, 11, 7, 0, 0),  // departed before 11 Aug 14:00
+                    ArrivalTime = new DateTime(2025, 8, 11, 16, 30, 0),      // arriving after 11 Aug 15:00
+                    IsHoliday = false,
+                    FlightStatus = "In-Flight",
+                    CheckInCount = 150,
+                    SeatsSold = 140,
+                    Distance = 5300,
+                    NumberOfCrew = 8,
+                    Prediction = null,
+                    Probability = null,
+                },
+
+                new FlightDetail {
+                    Aircraft = aircrafts["MH603"],
+                    OriginAirport = airports["SIN"],
+                    DestinationAirport = airports["ICN"],
+                    DepartureTime = new DateTime(2025, 8, 11, 8, 45, 0),  // departed before 11 Aug 14:00
+                    ArrivalTime = new DateTime(2025, 8, 11, 17, 30, 0),      // arriving after 11 Aug 15:00
+                    IsHoliday = false,
+                    FlightStatus = "In-Flight",
+                    CheckInCount = 150,
+                    SeatsSold = 140,
+                    Distance = 5300,
+                    NumberOfCrew = 8,
+                    Prediction = null,
+                    Probability = null
+                },
+
+                new FlightDetail {
+                    Aircraft = aircrafts["JL37"],
+                    OriginAirport = airports["NRT"],
+                    DestinationAirport = airports["HAN"],
+                    DepartureTime = new DateTime(2025, 8, 11, 6, 15, 0),  // departed before 11 Aug 14:00
+                    ArrivalTime = new DateTime(2025, 8, 11, 20, 00, 0),      // arriving after 11 Aug 15:00
+                    IsHoliday = false,
+                    FlightStatus = "In-Flight",
+                    CheckInCount = 150,
+                    SeatsSold = 140,
+                    Distance = 5300,
+                    NumberOfCrew = 8,
+                    Prediction = null,
+                    Probability = null
+                },
+
+                 new FlightDetail {
+                    Aircraft = aircrafts["EY451"],
+                    OriginAirport = airports["AUH"],
+                    DestinationAirport = airports["KUL"],
+                    DepartureTime = new DateTime(2025, 8, 11, 13, 45, 0),  // departed before 11 Aug 14:00
+                    ArrivalTime = new DateTime(2025, 8, 11, 22, 00, 0),      // arriving after 11 Aug 15:00
+                    IsHoliday = false,
+                    FlightStatus = "In-Flight",
+                    CheckInCount = 150,
+                    SeatsSold = 140,
+                    Distance = 5300,
+                    NumberOfCrew = 8,
+                    Prediction = null,
+                    Probability = null
+                 },
+
+                 new FlightDetail {
+                    Aircraft = aircrafts["QF32"],
+                    OriginAirport = airports["CBR"],
+                    DestinationAirport = airports["AUH"],
+                    DepartureTime = new DateTime(2025, 8, 10, 8, 45, 0),   // departed before 10 Aug 14:00 (11 Aug minus 1 day)
+                    ArrivalTime = new DateTime(2025, 8, 10, 16, 0, 0),      // arriving after 10 Aug 15:00 (11 Aug minus 1 day)
+                    IsHoliday = false,
+                    FlightStatus = "Landed",
+                    CheckInCount = 160,
+                    SeatsSold = 155,
+                    Distance = 6300,
+                    NumberOfCrew = 7,
+                    Prediction = null,
+                    Probability = null
+                 },
+
+                 new FlightDetail {
+                    Aircraft = aircrafts["VN310"],
+                    OriginAirport = airports["NRT"],
+                    DestinationAirport = airports["HAN"],
+                    DepartureTime = new DateTime(2025, 8, 10, 11, 00, 0),   // departed before 10 Aug 14:00 (11 Aug minus 1 day)
+                    ArrivalTime = new DateTime(2025, 8, 10, 19, 30, 0),      // arriving after 10 Aug 15:00 (11 Aug minus 1 day)
+                    IsHoliday = false,
+                    FlightStatus = "Landed",
+                    CheckInCount = 180,
+                    SeatsSold = 170,
+                    Distance = 3700,
+                    NumberOfCrew = 9,
+                    Prediction = null,
+                    Probability = null
+                 },
+
+                 new FlightDetail {
+                    Aircraft = aircrafts["LX178"],
+                    OriginAirport = airports["ZRH"],
+                    DestinationAirport = airports["SIN"],
+                    DepartureTime = new DateTime(2025, 8, 10, 10, 15, 0),   // departed before 10 Aug 14:00 (11 Aug minus 1 day)
+                    ArrivalTime = new DateTime(2025, 8, 10, 17, 25, 0),      // arriving after 10 Aug 15:00 (11 Aug minus 1 day)
+                    IsHoliday = false,
+                    FlightStatus = "Landed",
+                    CheckInCount = 230,
+                    SeatsSold = 225,
+                    Distance = 10300,
+                    NumberOfCrew = 11,
+                    Prediction = null,
+                    Probability = null
+                 },
 
             };
 
@@ -188,7 +326,6 @@ namespace skylance_backend.Controllers
         }
     }
 }
-
 
 
 

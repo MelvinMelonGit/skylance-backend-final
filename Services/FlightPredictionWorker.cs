@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,16 +7,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using skylance_backend.Data;
 using skylance_backend.Enum;
+using skylance_backend.Models;
 
 namespace skylance_backend.Services
 {
-    /// Background service that periodically looks for bookings
-    /// without a Prediction and calls the MLService to fill them in.
-    public class BookingPredictionWorker : BackgroundService
+    /// Background service that periodically looks for flights
+    /// without a Probability and calls the MLService to fill them in.
+    public class FlightPredictionWorker : BackgroundService
     {
         private readonly IServiceProvider _sp;
 
-        public BookingPredictionWorker(IServiceProvider sp)
+        public FlightPredictionWorker(IServiceProvider sp)
             => _sp = sp;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -30,18 +31,18 @@ namespace skylance_backend.Services
                     var ml = scope.ServiceProvider.GetRequiredService<MLService>();
 
                     // Grab any new bookings (Prediction == null)
-                    var pending = await db.FlightBookingDetails
-                                          .Where(b => b.Prediction == null)
+                    var pending = await db.FlightDetails
+                                          .Where(b => b.Probability == null)
                                           .ToListAsync(stoppingToken);
 
-                    foreach (var booking in pending)
+                    foreach (var flight in pending)
                     {
                         try
                         {
-                            // Call Python service for this one booking
-                            // (CallSingleAsync will POST /predict/{id})
-                            var res = await ml.CallSingleAsync(booking.Id);
-                            booking.Prediction = (Prediction)res.prediction;
+                            // Call Python service for this one flight
+                            // (CallSingleFlightAsync will POST /predict_f/{id})
+                            var res = await ml.CallSingleFlightAsync(flight.Id);
+                            flight.Probability = res.probability;
                         }
                         catch
                         {

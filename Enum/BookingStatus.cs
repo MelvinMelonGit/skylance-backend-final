@@ -5,6 +5,7 @@
         Confirmed,
         CheckedIn,
         Cancelled,
-        Rebooked
+        Rebooked,
+        NoShow
     }
 }

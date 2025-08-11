@@ -31,4 +31,5 @@ public class Aircraft
 
     //[Required]
     public virtual ICollection<Seat>? Seats { get; set; }
+    
 }

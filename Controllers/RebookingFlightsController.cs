@@ -27,6 +27,7 @@ namespace skylance_backend.Controllers
                 .Include(f => f.Aircraft)
                 .Include(f => f.OriginAirport)
                 .Include(f => f.DestinationAirport)
+                .Where(f => f.CheckInCount < f.Aircraft.SeatCapacity) 
                 .ToListAsync();
         }
 
@@ -54,5 +55,3 @@ namespace skylance_backend.Controllers
     }
 
 }
-
-

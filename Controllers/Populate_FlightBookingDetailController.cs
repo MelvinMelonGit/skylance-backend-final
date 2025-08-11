@@ -37,7 +37,9 @@ namespace skylance_backend.Controllers
                     RequireSpecialAssistance = true,
                     BookingStatus = BookingStatus.Confirmed,
                     Fareamount = 1200,
-                    Prediction = null
+                    Prediction = null,
+                    Class = Class.First,
+                    SpecialRequest = SpecialRequest.AisleSeat
                 },
 
                 new FlightBookingDetail
@@ -50,7 +52,9 @@ namespace skylance_backend.Controllers
                     RequireSpecialAssistance = false,
                     BookingStatus = BookingStatus.Confirmed,
                     Fareamount = 2000,
-                    Prediction = null
+                    Prediction = null,
+                    Class = Class.Business,
+                    SpecialRequest = SpecialRequest.Vegan
                 },
 
                 new FlightBookingDetail
@@ -63,7 +67,10 @@ namespace skylance_backend.Controllers
                     RequireSpecialAssistance = false,
                     BookingStatus = BookingStatus.Confirmed,
                     Fareamount = 2300,
-                    Prediction = Prediction.No_Show
+                    Prediction = Prediction.No_Show,
+                    Class =  Class.PremiumEconomy,
+                    SpecialRequest = SpecialRequest.Diabetic
+
                 },
 
                 new FlightBookingDetail
@@ -76,7 +83,9 @@ namespace skylance_backend.Controllers
                     RequireSpecialAssistance = false,
                     BookingStatus = BookingStatus.Confirmed,
                     Fareamount = 1700,
-                    Prediction = null
+                    Prediction = null,
+                    Class = Class.Economy,
+                    SpecialRequest = SpecialRequest.UMNR
                 },
 
                 new FlightBookingDetail
@@ -89,7 +98,9 @@ namespace skylance_backend.Controllers
                     RequireSpecialAssistance = false,
                     BookingStatus = BookingStatus.Confirmed,
                     Fareamount = 800,
-                    Prediction = null
+                    Prediction = null,
+                    Class = Class.Business,
+                    SpecialRequest = SpecialRequest.Wheelchair
                 },               
 
                  new FlightBookingDetail
@@ -102,7 +113,9 @@ namespace skylance_backend.Controllers
                     RequireSpecialAssistance = true,
                     BookingStatus = BookingStatus.Confirmed,
                     Fareamount = 1200,
-                    Prediction = null
+                    Prediction = null,
+                    Class = Class.First,
+                    SpecialRequest = null
                 },
 
                 new FlightBookingDetail
@@ -115,7 +128,9 @@ namespace skylance_backend.Controllers
                     RequireSpecialAssistance = false,
                     BookingStatus = BookingStatus.Confirmed,
                     Fareamount = 2000,
-                    Prediction = Prediction.No_Show
+                    Prediction = Prediction.No_Show,
+                    Class = Class.PremiumEconomy,
+                    SpecialRequest = null
                 },
 
                 new FlightBookingDetail
@@ -128,7 +143,9 @@ namespace skylance_backend.Controllers
                     RequireSpecialAssistance = false,
                     BookingStatus = BookingStatus.Confirmed,
                     Fareamount = 2300,
-                    Prediction = null
+                    Prediction = null,
+                    Class = Class.Economy,
+                    SpecialRequest = null
                 },
 
                 new FlightBookingDetail
@@ -141,7 +158,9 @@ namespace skylance_backend.Controllers
                     RequireSpecialAssistance = false,
                     BookingStatus = BookingStatus.Confirmed,
                     Fareamount = 1700,
-                    Prediction = null
+                    Prediction = null,
+                    Class = Class.Economy,
+                    SpecialRequest = SpecialRequest.Vegan
                 },
 
                 new FlightBookingDetail
@@ -154,7 +173,9 @@ namespace skylance_backend.Controllers
                     RequireSpecialAssistance = false,
                     BookingStatus = BookingStatus.Confirmed,
                     Fareamount = 800,
-                    Prediction = null
+                    Prediction = null,
+                    Class = Class.Economy,
+                    SpecialRequest = null
                 }
             };
 

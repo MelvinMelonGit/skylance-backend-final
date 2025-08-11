@@ -38,16 +38,18 @@ builder.Services.Configure<FastApi>(
 );
 
 // Register MLService, pulling BaseUrl from the bound options
-/*builder.Services.AddHttpClient<MLService>((sp, client) =>
+builder.Services.AddHttpClient<MLService>((sp, client) =>
 {
     // resolve the options
     var opts = sp.GetRequiredService<IOptions<FastApi>>().Value;
     client.BaseAddress = new Uri(opts.BaseUrl);
-});*/
+});
 // Register the background worker to catch and update bookings without prediction
-//builder.Services.AddHostedService<BookingPredictionWorker>();
+builder.Services.AddHostedService<BookingPredictionWorker>();
+builder.Services.AddHostedService<FlightPredictionWorker>();
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<RevenueService>();
 
 // Swagger setup
 builder.Services.AddEndpointsApiExplorer();

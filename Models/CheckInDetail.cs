@@ -1,3 +1,4 @@
+using skylance_backend.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -33,4 +34,5 @@ public class CheckInDetail
     
     [Required]
     public required string Terminal { get; set; }
+    public BoardingStatus BoardingStatus { get; set; }
 }

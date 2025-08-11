@@ -19,7 +19,7 @@ namespace skylance_backend.Controllers
         public IActionResult Populate()
         {
             if (db.Cities.Any())
-            return BadRequest("Data already seeded.");
+                return BadRequest("Data already seeded.");
            
             var countries = db.Countries.ToDictionary(c => c.Name, c => c);
 
@@ -43,4 +43,3 @@ namespace skylance_backend.Controllers
 
     }
 }
-

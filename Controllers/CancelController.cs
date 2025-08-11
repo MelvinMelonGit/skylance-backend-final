@@ -61,6 +61,7 @@ namespace skylance_backend.Controllers
             var flightBookingDetail = _db.FlightBookingDetails
             .Include(f => f.BookingDetail)
                 .ThenInclude(b => b.AppUser)
+            .Include(f => f.FlightDetail)
             .FirstOrDefault(f => f.Id == flightBookingDetailId);
             var overbooking = _db.OverbookingDetails
                .FirstOrDefault(o => o.OldFlightBookingDetailId == flightBookingDetailId);

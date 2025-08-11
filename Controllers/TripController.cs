@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using skylance_backend.Attributes;
+using skylance_backend.Data;
 using skylance_backend.Enum;
 using skylance_backend.Services;
 
@@ -11,10 +12,16 @@ namespace skylance_backend.Controllers;
 public class TripController : ControllerBase
 {
     private readonly ITripService _tripService;
+    private readonly SkylanceDbContext _context;
 
     public TripController(ITripService tripService)
     {
         _tripService = tripService;
+    }
+
+    public TripController(SkylanceDbContext context)
+    {
+        _context = context;
     }
 
     // GET: api/trips/{flightDetailsId}

@@ -16,7 +16,7 @@ public class OverbookingDetail
     [ForeignKey("OldFlightBookingDetailId")]
     public virtual FlightBookingDetail? OldFlightBookingDetail { get; set; }
 
-    [MaxLength(255)] 
+    [MaxLength(255)]
     public string? NewFlightBookingDetailId { get; set; }
 
     [ForeignKey("NewFlightBookingDetailId")]

@@ -68,9 +68,15 @@ namespace skylance_backend.Services
 
             var checkedInCount = flight.CheckInCount;
             var seatCapacity = flight.Aircraft.SeatCapacity;
+            var overbookingCount = flight.OverbookingCount;
 
             if (checkedInCount >= seatCapacity)
+            {
+                flight.OverbookingCount++;
+                await _context.SaveChangesAsync();
+
                 return CheckInValidationResult.FlightFullyCheckedIn;
+            }
 
             return CheckInValidationResult.Allowed;
         }
