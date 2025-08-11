@@ -31,7 +31,14 @@ namespace skylance_backend.Controllers
                 new Country { Name = "Australia", CountryCode = "AU", MobileCode = 61 },           
                 new Country { Name = "United Arab Emirates", CountryCode = "AE", MobileCode = 971 },
                 new Country { Name = "Switzerland", CountryCode = "CH", MobileCode = 41 },
-                new Country { Name = "Vietnam", CountryCode = "VN", MobileCode = 84 }
+                new Country { Name = "Vietnam", CountryCode = "VN", MobileCode = 84 },
+                new Country { Name = "United Kingdom", CountryCode = "GB", MobileCode = 44 },
+                new Country { Name = "France", CountryCode = "FR", MobileCode = 33 },
+                new Country { Name = "Germany", CountryCode = "DE", MobileCode = 49 },
+                new Country { Name = "Spain", CountryCode = "ES", MobileCode = 34 },
+                new Country { Name = "Netherlands", CountryCode = "NL", MobileCode = 31 },
+                new Country { Name = "Brazil", CountryCode = "BR", MobileCode = 55 },
+                new Country { Name = "Argentina", CountryCode = "AR", MobileCode = 54 }
             };
 
             db.Countries.AddRange(countryList);

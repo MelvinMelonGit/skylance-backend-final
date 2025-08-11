@@ -22,7 +22,7 @@ namespace skylance_backend.Controllers
         public IActionResult GetAllFlights(int page = 1, int pageSize = 4)
         {
             int totalFlights = db.FlightDetails
-                .Where(f => f.DepartureTime > DateTime.Now)
+                //.Where(f => f.DepartureTime > DateTime.Now)   
                 .Count();
 
             var flights = db.FlightDetails

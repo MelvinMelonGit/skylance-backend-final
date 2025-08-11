@@ -19,7 +19,7 @@ namespace skylance_backend.Controllers
         public IActionResult Populate()
         {
             if (db.Cities.Any())
-                return BadRequest("Data already seeded.");
+            return BadRequest("Data already seeded.");
            
             var countries = db.Countries.ToDictionary(c => c.Name, c => c);
 
@@ -32,7 +32,14 @@ namespace skylance_backend.Controllers
                 new City { Name = "Kuala Lumpur", Country = countries["Malaysia"]},           
                 new City { Name = "Abu Dhabi", Country = countries["United Arab Emirates"] },
                 new City { Name = "Zurich", Country = countries["Switzerland"] },
-                new City { Name = "Hanoi", Country = countries["Vietnam"] }
+                new City { Name = "Hanoi", Country = countries["Vietnam"] },
+                new City { Name = "London", Country = countries["United Kingdom"] },
+                new City { Name = "Paris", Country = countries["France"] },
+                new City { Name = "Frankfurt", Country = countries["Germany"] },
+                new City { Name = "Madrid", Country = countries["Spain"] },
+                new City { Name = "Amsterdam", Country = countries["Netherlands"] },
+                new City { Name = "São Paulo", Country = countries["Brazil"] },
+                new City { Name = "Buenos Aires", Country = countries["Argentina"] }
             };
 
             db.Cities.AddRange(cityList);

@@ -33,7 +33,14 @@ namespace skylance_backend.Controllers
             new Airport { IataCode = "CBR", Name = "Canberra International Airport", City = cities["Canberra"], TimeZone = "Australia/Sydney"},           
             new Airport { IataCode = "AUH", Name = "Abu Dhabi International Airport", City = cities["Abu Dhabi"], TimeZone = "Asia/Dubai" },
             new Airport { IataCode = "ZRH", Name = "Zurich Airport", City = cities["Zurich"], TimeZone = "Europe/Zurich" },
-            new Airport { IataCode = "HAN", Name = "Noi Bai International Airport", City = cities["Hanoi"], TimeZone = "Asia/Bangkok" }
+            new Airport { IataCode = "HAN", Name = "Noi Bai International Airport", City = cities["Hanoi"], TimeZone = "Asia/Bangkok" },
+            new Airport { IataCode = "LHR", Name = "Heathrow Airport", City = cities["London"], TimeZone = "Europe/London" },
+            new Airport { IataCode = "CDG", Name = "Charles de Gaulle Airport", City = cities["Paris"], TimeZone = "Europe/Paris" },
+            new Airport { IataCode = "FRA", Name = "Frankfurt Airport", City = cities["Frankfurt"], TimeZone = "Europe/Berlin" },
+            new Airport { IataCode = "MAD", Name = "Adolfo Suárez Madrid–Barajas Airport", City = cities["Madrid"], TimeZone = "Europe/Madrid" },
+            new Airport { IataCode = "AMS", Name = "Amsterdam Airport Schiphol", City = cities["Amsterdam"], TimeZone = "Europe/Amsterdam" },
+            new Airport { IataCode = "GRU", Name = "São Paulo/Guarulhos–Governador André Franco Montoro International Airport", City = cities["São Paulo"], TimeZone = "America/Sao_Paulo" },
+            new Airport { IataCode = "EZE", Name = "Ministro Pistarini International Airport", City = cities["Buenos Aires"], TimeZone = "America/Argentina/Buenos_Aires" }
         };
 
             db.Airports.AddRange(airportList);
