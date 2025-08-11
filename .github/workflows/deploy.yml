@@ -21,11 +21,17 @@ jobs:
           pip install semgrep
           semgrep --config auto --sarif > semgrep.sarif
     
-      - name: Upload Semgrep SARIF results
+      - name: Upload Semgrep SARIF results to Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: semgrep.sarif
           token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Upload Semgrep SARIF as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-report
+          path: semgrep.sarif
 
       - name: Run OWASP Dependency-Check (SCA)
         uses: dependency-check/Dependency-Check_Action@main
