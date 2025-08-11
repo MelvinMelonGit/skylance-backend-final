@@ -8,12 +8,12 @@ namespace skylance_backend.Controllers
 {
     [ApiController]
     [Route("api")]
-    public class FlightBookingController : ControllerBase
+    public class PassengerController : ControllerBase
     {
         private readonly SkylanceDbContext _context;
         private readonly MLService _mlService;
 
-        public FlightBookingController(SkylanceDbContext context)
+        public PassengerController(SkylanceDbContext context)
         {
             _context = context;
         }
