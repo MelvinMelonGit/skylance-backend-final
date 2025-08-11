@@ -30,7 +30,7 @@ namespace skylance_backend.Controllers
         [HttpPost("all")]
         public async Task<IActionResult> PredictFlights()
         {
-            var result = await _mlService.CallBulkAsync();
+            var result = await _mlService.CallBulkFlightAsync();
             return Ok(new { updated = result.updated });
         }
 
