@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using skylance_backend.Attributes;
 using skylance_backend.Data;
-using skylance_backend.Models;
-using skylance_backend.Services;
+// using skylance_backend.Services; if need ML prediction in future
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace skylance_backend.Controllers
@@ -13,26 +12,21 @@ namespace skylance_backend.Controllers
     [Route("api/[controller]")]
     public class OversalesController : ControllerBase
     {
-        private readonly MLService _mlService;
         private readonly SkylanceDbContext _context;
 
-        public OversalesController(MLService mlService, SkylanceDbContext context)
+        public OversalesController(SkylanceDbContext context)
         {
-            _mlService = mlService;
             _context = context;
         }
 
+        /// For dropdowns
+        /// GET: /api/oversales/available-flights
 
-        /// <summary>
-        /// Returns a compact list of flights for the dropdown.
-        /// No date filter — suitable for newly created flights too.
-        /// </summary>
-        /// GET /api/oversales/available-flights
-        // GET: /api/Oversales/available-flights
         [HttpGet("available-flights")]
         public async Task<IActionResult> AvailableFlights()
         {
             var list = await _context.FlightDetails
+                .AsNoTracking()
                 .Where(f => f.Aircraft != null
                             && f.Aircraft.SeatCapacity > 0
                             && f.Aircraft.FlightNumber != null
@@ -48,52 +42,76 @@ namespace skylance_backend.Controllers
             return Ok(new { success = true, data = list });
         }
 
-        // POST: /api/Oversales/calculate
+        /// Calculate oversales for a (possibly new) flight using the historical average
+        /// show probability of the given FlightNumber.
+
+        /// POST: /api/oversales/calculate
         [HttpPost("calculate")]
         public async Task<ActionResult<OversalesResponse>> Calculate([FromBody] OversalesRequest req)
         {
-            var flight = await _context.FlightDetails
-                .Where(f => f.Id == req.FlightId)
-                .Select(f => new
-                {
-                    f.Id,
-                    Prob = (double?)f.Probability,            // may be null
-                    Code = f.Aircraft.FlightNumber,
-                    Capacity = f.Aircraft.SeatCapacity
-                })
-                .SingleOrDefaultAsync();
+            if (req is null) return BadRequest("Request body is required.");
+            if (string.IsNullOrWhiteSpace(req.FlightNumber))
+                return BadRequest("FlightNumber is required.");
 
-            if (flight == null)
-                return NotFound($"Flight {req.FlightId} not found.");
+            var code = req.FlightNumber.Trim();
 
-            if (string.IsNullOrWhiteSpace(flight.Code) || flight.Capacity <= 0)
-                return BadRequest("Flight has no valid aircraft/code or seat capacity.");
+            // 1. Find historical flights with same code that already have a probability
+            var hist = _context.FlightDetails
+                .AsNoTracking()
+                .Where(f => f.Aircraft != null
+                            && f.Aircraft.FlightNumber == code
+                            && f.Probability != null);
 
-            if (flight.Prob is null)
-                return Conflict($"Flight {flight.Code} has no stored probability. Please run prediction first.");
+            var count = await hist.CountAsync();
+            if (count == 0)
+                return Conflict($"No historical probabilities found for flight number {code}. Run predictions first.");
 
-            // default safety factor is 80% if 0 or out of range
+            // 2. Average show prob (normalize each row from 0..1 or 0..100 to 0..1)
+            var avgShow01 = await hist
+                .Select(f => f.Probability!.Value <= 1.0
+                    ? f.Probability!.Value
+                    : f.Probability!.Value / 100.0)
+                .AverageAsync();
+
+            // 3. Resolve capacity: prefer request value, else use most recent seat capacity for this code
+            int? capacity = req.Capacity;
+            if (capacity is null || capacity <= 0)
+            {
+                capacity = await _context.FlightDetails
+                    .AsNoTracking()
+                    .Where(f => f.Aircraft != null
+                                && f.Aircraft.FlightNumber == code
+                                && f.Aircraft.SeatCapacity > 0)
+                    .OrderByDescending(f => f.Id)
+                    .Select(f => (int?)f.Aircraft.SeatCapacity)
+                    .FirstOrDefaultAsync();
+            }
+
+            if (capacity is null || capacity <= 0)
+                return BadRequest($"No valid seat capacity found/provided for {code}.");
+
+            // 4. Safety factor (default 0.8 if null/out of range)
             var safety = (req.SafetyFactor is null || req.SafetyFactor <= 0 || req.SafetyFactor > 1)
                 ? 0.8
                 : req.SafetyFactor.Value;
-            // DB may store 0..1 or 0..100; normalize to percent
-            var showPct = flight.Prob <= 1.0 ? flight.Prob.Value * 100.0 : flight.Prob.Value;
 
-            // Recommend extra tickets = capacity × (1 − show%) × safety
-            var recommend = Math.Max(0, (int)Math.Round(
-                flight.Capacity * (1.0 - (showPct / 100.0)) * safety));
+            // 5. Compute recommendation
+            var showPct = Math.Clamp(avgShow01 * 100.0, 0, 100);
+            var recommend = Math.Max(0, (int)Math.Round(capacity.Value * (1.0 - avgShow01) * safety));
 
             var rationale =
-                $"Used stored show probability {showPct:F2}% for {flight.Code} " +
-                $"(capacity {flight.Capacity}), safety factor {safety:0.##}. " +
-                $"Recommend oversale {recommend} tickets. ";
-                
+                $"Used historical average show probability {showPct:F2}% for {code} " +
+                $"from {count} past flight(s), capacity {capacity}, safety factor {safety:0.##}. " +
+                $"Recommend oversale {recommend} tickets.";
 
-            return Ok(new OversalesResponse(
-                flight.Id,
-                showPct,
-                recommend,
-                rationale));
+            var resp = new OversalesResponse(
+                FlightNumber: code,
+                ShowPercentage: showPct,
+                RecommendOversale: recommend,
+                Rationale: rationale
+            );
+
+            return Ok(resp);
         }
     }
 }
