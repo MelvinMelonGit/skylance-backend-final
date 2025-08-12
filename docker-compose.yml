@@ -23,7 +23,6 @@ services:
     restart: always
     environment:
       ConnectionStrings__DefaultConnection: "server=db;database=${MYSQL_DATABASE};user=${MYSQL_USER};password=${MYSQL_PASSWORD};"
-      ASPNETCORE_URLS: "http://0.0.0.0:5035"
     ports:
       - "5035:8080"
     depends_on:
