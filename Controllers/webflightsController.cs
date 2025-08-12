@@ -100,6 +100,7 @@ namespace skylance_backend.Controllers
                     flightid = f.Aircraft.FlightNumber,
                     route = $"{f.OriginAirport.IataCode} → {f.DestinationAirport.IataCode}",
                     departure = f.DepartureTime.ToString("HH:mm"),
+                    overbookingCount = f.OverbookingCount,
                     capacity = f.Aircraft.SeatCapacity,
                     booked = f.SeatsSold,
                     checkedIn = f.CheckInCount,
