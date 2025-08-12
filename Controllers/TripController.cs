@@ -14,14 +14,10 @@ public class TripController : ControllerBase
     private readonly ITripService _tripService;
     private readonly SkylanceDbContext _context;
 
-    public TripController(ITripService tripService)
-    {
-        _tripService = tripService;
-    }
-
-    public TripController(SkylanceDbContext context)
+    public TripController(SkylanceDbContext context, ITripService tripService)
     {
         _context = context;
+        _tripService = tripService;
     }
 
     // GET: api/trips/{flightDetailsId}
