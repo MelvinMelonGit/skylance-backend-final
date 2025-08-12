@@ -22,42 +22,42 @@ namespace skylance_backend.Services
             _db.AirlineRevenue.RemoveRange(_db.AirlineRevenue);
 
             var flightbookings = await _db.FlightBookingDetails
-           .Include(b => b.FlightDetail)
+               .Include(b => b.FlightDetail)
                .ThenInclude(f => f.Aircraft)
-           .Where(b => b.BookingStatus == BookingStatus.Confirmed)
-           .Select(b => new {
-               b.Id,
-               b.Fareamount,
-               FlightDetail = new
-               {
-                   b.FlightDetail.DepartureTime,
-                   Aircraft = new
-                   {
-                       b.FlightDetail.Aircraft.Airline
-                   }
-               }
-           })
-           .AsNoTracking()
-           .ToListAsync();
+               //.Where(b => b.BookingStatus == BookingStatus.Checkin)//&&b.BookingStatus == BookingStatus.CheckedIn)
+               .Select(b => new {
+                        b.Id,
+                        b.Fareamount,
+                        FlightDetail = new
+                        {
+                            b.FlightDetail.DepartureTime,
+                            Aircraft = new
+                            {
+                                 b.FlightDetail.Aircraft.Airline
+                            }
+                        }
+                      })
+               .AsNoTracking()
+               .ToListAsync();
 
 
             var compensations = await _db.OverbookingDetails
-            .Select(o => new { o.OldFlightBookingDetailId, o.FinalCompensationAmount })
-            .AsNoTracking()
-            .ToListAsync();
+               .Select(o => new { o.OldFlightBookingDetailId, o.FinalCompensationAmount })
+               .AsNoTracking()
+               .ToListAsync();
 
             var monthlyData = flightbookings
-    .GroupBy(b => new
-    {
-        AirlineCode = b.FlightDetail.Aircraft.Airline[..2],
-        AirlineName = b.FlightDetail.Aircraft.Airline,
-        Year = b.FlightDetail.DepartureTime.Year,
-        Month = b.FlightDetail.DepartureTime.Month
-    })
-    .Select(g => {
-        var totalCompensation = compensations
-            .Where(c => g.Select(b => b.Id).Contains(c.OldFlightBookingDetailId))
-            .Sum(c => c.FinalCompensationAmount);
+               .GroupBy(b => new
+               {
+                   AirlineCode = b.FlightDetail.Aircraft.Airline[..2],
+                   AirlineName = b.FlightDetail.Aircraft.Airline,
+                   Year = b.FlightDetail.DepartureTime.Year,
+                   Month = b.FlightDetail.DepartureTime.Month
+               })
+               .Select(g => {
+            var totalCompensation = compensations
+               .Where(c => g.Select(b => b.Id).Contains(c.OldFlightBookingDetailId))
+               .Sum(c => c.FinalCompensationAmount);
 
             return new AirlineRevenue
                     {
@@ -105,3 +105,66 @@ namespace skylance_backend.Services
         }
     }
 }
+/*public async Task CalculateAndStoreRevenue()
+{
+
+    _db.AirlineRevenue.RemoveRange(_db.AirlineRevenue);
+
+
+    var flightbookings = await _db.FlightBookingDetails
+        .Include(b => b.FlightDetail)
+            .ThenInclude(f => f.Aircraft)
+        .Where(b => b.BookingStatus == BookingStatus.Confirmed && b.FlightDetail != null)
+        .Select(b => new {
+            b.Id,
+            b.FareAmount,
+            FlightDetail = new {
+                b.FlightDetail.DepartureTime,
+                Aircraft = new {
+                    b.FlightDetail.Aircraft.Airline,
+                    b.FlightDetail.Aircraft.AirlineCode 
+                }
+            }
+        })
+        .AsNoTracking()
+        .ToListAsync();
+
+    var compensations = await _db.OverbookingDetails
+        .Where(o => o.OldFlightBookingDetailId != null)
+        .Select(o => new { 
+            OldFlightBookingDetailId = o.OldFlightBookingDetailId.Value, 
+            o.FinalCompensationAmount 
+        })
+        .AsNoTracking()
+        .ToListAsync();
+
+
+    var monthlyData = flightbookings
+        .GroupBy(b => new {
+            AirlineCode = b.FlightDetail.Aircraft.AirlineCode,
+            AirlineName = b.FlightDetail.Aircraft.Airline,
+            Year = b.FlightDetail.DepartureTime.Year,
+            Month = b.FlightDetail.DepartureTime.Month
+        })
+        .Select(g => {
+            var bookingIds = g.Select(b => b.Id).ToList();
+            var totalCompensation = compensations
+                .Where(c => bookingIds.Contains(c.OldFlightBookingDetailId))
+                .Sum(c => c.FinalCompensationAmount);
+
+            return new AirlineRevenue {
+                Period = $"{g.Key.Year}-{g.Key.Month:00}",
+                PeriodType = "month",
+                AirlineCode = g.Key.AirlineCode,
+                AirlineName = g.Key.AirlineName,
+                TicketsSold = g.Count(),
+                Revenue = g.Sum(b => b.FareAmount) - totalCompensation
+            };
+        })
+        .ToList();
+
+)
+
+    await _db.AirlineRevenue.AddRangeAsync(monthlyData);
+    await _db.AirlineRevenue.AddRangeAsync(yearlyData);
+    await _db.SaveChangesAsync();*/
