@@ -36,6 +36,7 @@ namespace skylance_backend.Controllers
                     PassengerId = f.BookingDetail.AppUser.Id,
                     FlightNumber = f.FlightDetail.Aircraft.FlightNumber,
                     Airline = f.FlightDetail.Aircraft.Airline,
+                    BookingDate = f.BookingDate,
                     PassengerName = (f.BookingDetail.AppUser.FirstName) + f.BookingDetail.AppUser.LastName,
                     Class = f.Class.ToString(),
                     MembershipTier = f.BookingDetail.AppUser.MembershipTier,
