@@ -76,9 +76,15 @@ namespace skylance_backend.Controllers
 
             DateTime today = DateTime.Today; 
            DateTime startDate = today.AddMonths(-5);
-           string startPeriod = startDate.ToString("yyyy-MM");
-           var monthlyData = await _db.AirlineRevenue
-               .Where(r => r.PeriodType == "month" &&r.Period.CompareTo(startPeriod) >= 0)
+            
+            string startPeriod = startDate.ToString("yyyy-MM");
+            string endPeriod = today.ToString("yyyy-MM");
+
+            var monthlyData = await _db.AirlineRevenue
+               .Where(
+                r => r.PeriodType == "month" 
+                &&r.Period.CompareTo(startPeriod) >= 0
+                 && r.Period.CompareTo(endPeriod) <= 0)
                .Select(r => new {
                    r.Period,
                    r.Revenue
