@@ -1,10 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using skylance_backend.Data;
 // using skylance_backend.Services; if need ML prediction in future
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using skylance_backend.Data;
+using skylance_backend.Models;
+using skylance_backend.Attributes;
 
 namespace skylance_backend.Controllers
 {
@@ -19,12 +21,28 @@ namespace skylance_backend.Controllers
             _context = context;
         }
 
+        //Helper method
+        private string? GetLoggedInEmployeeId()
+        {
+            var empSession = HttpContext.Items["EmployeeSession"] as EmployeeSession;
+            if (empSession == null)
+                return null;
+
+            return empSession.Employee.Id;
+        }
+
         /// For dropdowns
         /// GET: /api/oversales/available-flights
 
+        [ProtectedRoute]
         [HttpGet("available-flights")]
         public async Task<IActionResult> AvailableFlights()
         {
+            // assign the logged-in EmployeeId with the helper method (EmployeeSession from AuthMiddleware)
+            var loggedInEmployeeId = GetLoggedInEmployeeId();
+            if (loggedInEmployeeId == null)
+                return Unauthorized();
+
             var list = await _context.FlightDetails
                 .AsNoTracking()
                 .Where(f => f.Aircraft != null
@@ -48,12 +66,18 @@ namespace skylance_backend.Controllers
         /// show probability of the given FlightNumber.
 
         /// GET: /api/oversales/calculate/{flightNumber}?capacity=240&safetyFactor=0.85
+        [ProtectedRoute]
         [HttpGet("calculate/{flightNumber}")]
         public async Task<ActionResult<OversalesResponse>> Calculate(
             string flightNumber,
             [FromQuery] int? capacity,
             [FromQuery] double? safetyFactor)
         {
+            // assign the logged-in EmployeeId with the helper method (EmployeeSession from AuthMiddleware)
+            var loggedInEmployeeId = GetLoggedInEmployeeId();
+            if (loggedInEmployeeId == null)
+                return Unauthorized();
+
             if (string.IsNullOrWhiteSpace(flightNumber))
                 return BadRequest("FlightNumber is required.");
 

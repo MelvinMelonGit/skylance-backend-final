@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using skylance_backend.Data;
+using skylance_backend.Models;
+using skylance_backend.Attributes;
 
 namespace skylance_backend.Controllers
 {
@@ -11,8 +13,19 @@ namespace skylance_backend.Controllers
         private readonly SkylanceDbContext _db;
         public PassengerShowController(SkylanceDbContext db) => _db = db;
 
+        //Helper method
+        private string? GetLoggedInEmployeeId()
+        {
+            var empSession = HttpContext.Items["EmployeeSession"] as EmployeeSession;
+            if (empSession == null)
+                return null;
+
+            return empSession.Employee.Id;
+        }
+
         // GET api/PassengerShow?range=month&year=2025&month=8
         // GET api/PassengerShow?range=year&year=2025
+        [ProtectedRoute]
         [HttpGet]
         public async Task<IActionResult> GetPassengerShow(
             [FromQuery] string range = "month",
@@ -23,6 +36,11 @@ namespace skylance_backend.Controllers
             [FromQuery] string method = "weighted"  // "weighted" | "unweighted"
         )
         {
+            // assign the logged-in EmployeeId with the helper method (EmployeeSession from AuthMiddleware)
+            var loggedInEmployeeId = GetLoggedInEmployeeId();
+            if (loggedInEmployeeId == null)
+                return Unauthorized();
+
             // 1. show the selected year and month, if not
             // get the current datetime to decide which year or month to show
             var now = DateTime.UtcNow;

@@ -18,11 +18,26 @@ namespace skylance_backend.Controllers
             this.db = db;
         }
 
+        //Helper method
+        private string? GetLoggedInEmployeeId()
+        {
+            var empSession = HttpContext.Items["EmployeeSession"] as EmployeeSession;
+            if (empSession == null)
+                return null;
+
+            return empSession.Employee.Id;
+        }
+
+        [ProtectedRoute]
         [HttpGet("allflights")]
         public IActionResult GetAllFlights(int page = 1, int pageSize = 4)
         {
-            int totalFlights = db.FlightDetails
-                //.Where(f => f.DepartureTime > DateTime.Now)   
+            // assign the logged-in EmployeeId with the helper method (EmployeeSession from AuthMiddleware)
+            var loggedInEmployeeId = GetLoggedInEmployeeId();
+            if (loggedInEmployeeId == null)
+                return Unauthorized();
+
+            int totalFlights = db.FlightDetails                   
                 .Count();
 
             var flights = db.FlightDetails
@@ -62,12 +77,18 @@ namespace skylance_backend.Controllers
             return Ok(result);
         }
 
-    
+
+        [ProtectedRoute]
         [HttpGet("open-for-checkin")]
         public async Task<ActionResult<object>> GetFlightDetails(
     [FromQuery] int page = 1,
     [FromQuery] int pageSize = 3)
         {
+            // assign the logged-in EmployeeId with the helper method (EmployeeSession from AuthMiddleware)
+            var loggedInEmployeeId = GetLoggedInEmployeeId();
+            if (loggedInEmployeeId == null)
+                return Unauthorized();
+
             var query = db.FlightDetails
                 .Include(f => f.Aircraft)
                 .Include(f => f.OriginAirport)

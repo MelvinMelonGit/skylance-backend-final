@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using skylance_backend.Data;
+using skylance_backend.Models;
+using skylance_backend.Attributes;
 
 namespace skylance_backend.Controllers
 {
@@ -15,9 +17,25 @@ namespace skylance_backend.Controllers
             this.db = db;
         }
 
+        //Helper method
+        private string? GetLoggedInEmployeeId()
+        {
+            var empSession = HttpContext.Items["EmployeeSession"] as EmployeeSession;
+            if (empSession == null)
+                return null;
+
+            return empSession.Employee.Id;
+        }
+
+        [ProtectedRoute]
         [HttpGet("summary")]
         public IActionResult Summary()
         {
+            // assign the logged-in EmployeeId with the helper method (EmployeeSession from AuthMiddleware)
+            var loggedInEmployeeId = GetLoggedInEmployeeId();
+            if (loggedInEmployeeId == null)
+                return Unauthorized();
+
             try
             {
                 // active flights now

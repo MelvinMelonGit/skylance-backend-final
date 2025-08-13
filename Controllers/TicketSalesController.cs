@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using skylance_backend.Data;
+using skylance_backend.Models;
+using skylance_backend.Attributes;
 
 namespace skylance_backend.Controllers
 {
@@ -15,9 +17,25 @@ namespace skylance_backend.Controllers
             _context = context;
         }
 
+        //Helper method
+        private string? GetLoggedInEmployeeId()
+        {
+            var empSession = HttpContext.Items["EmployeeSession"] as EmployeeSession;
+            if (empSession == null)
+                return null;
+
+            return empSession.Employee.Id;
+        }
+
+        [ProtectedRoute]
         [HttpGet]
         public async Task<IActionResult> GetTicketSales([FromQuery] string periodType)
         {
+            // assign the logged-in EmployeeId with the helper method (EmployeeSession from AuthMiddleware)
+            var loggedInEmployeeId = GetLoggedInEmployeeId();
+            if (loggedInEmployeeId == null)
+                return Unauthorized();
+
             if (string.IsNullOrWhiteSpace(periodType))
                 return BadRequest(new { status = "error", message = "Missing periodType" });
 
