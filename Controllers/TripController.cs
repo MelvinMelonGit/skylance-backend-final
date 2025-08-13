@@ -16,8 +16,8 @@ public class TripController : ControllerBase
 
     public TripController(SkylanceDbContext context, ITripService tripService)
     {
-        _context = context;
         _tripService = tripService;
+        _context = context;
     }
 
     // GET: api/trips/{flightDetailsId}
