@@ -72,7 +72,7 @@ namespace skylance_backend.Controllers
                 .Include(f => f.Aircraft)
                 .Include(f => f.OriginAirport)
                 .Include(f => f.DestinationAirport)
-                .Where(f => f.CheckInCount < f.Aircraft.SeatCapacity &&
+                .Where(f => f.CheckInCount <= f.Aircraft.SeatCapacity &&
                 f.DepartureTime > DateTime.Now);
 
             var totalItems = await query.CountAsync();
