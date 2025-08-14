@@ -39,14 +39,14 @@ namespace skylance_backend.Controllers
             try
             {
                 // active flights now
-                var startTime = new DateTime(2025, 8, 11, 14, 0, 0);
-                var endTime = new DateTime(2025, 8, 11, 15, 0, 0);
+                //var startTime = new DateTime(2025, 8, 11, 14, 0, 0);
+                //var endTime = new DateTime(2025, 8, 11, 15, 0, 0);
                 var activeFlightsNow = db.FlightDetails
-                    .Count(f => f.DepartureTime <= startTime && f.ArrivalTime >= endTime);
+                    .Count(f => f.DepartureTime <= DateTime.Now && f.ArrivalTime >= DateTime.Now);
 
                 // active flights yesterday as of now
                 var activeFlightsYesterdayNow = db.FlightDetails
-                    .Count(f => f.DepartureTime <= startTime.AddDays(-1) && f.ArrivalTime >= endTime.AddDays(-1));
+                    .Count(f => f.DepartureTime <= DateTime.Now.AddDays(-1) && f.ArrivalTime >= DateTime.Now.AddDays(-1));
 
                 // active flights - percentage change 
                 double trendActiveFlights;

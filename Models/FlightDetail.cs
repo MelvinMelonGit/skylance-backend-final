@@ -39,6 +39,7 @@ public class FlightDetail
 
     [Required]
     public required int CheckInCount { get; set; }
+    public int? PredictedCheckInCount { get; set; }
 
     [Required]
     public required int SeatsSold { get; set; }
@@ -46,9 +47,7 @@ public class FlightDetail
     [Required]
     public required double Distance { get; set; }
 
-    public int? NumberOfCrew { get; set; }
-
-    public Prediction? Prediction { get; set; }     
+    public int? NumberOfCrew { get; set; }    
 
     public float? Probability { get; set; }
     public int? OverbookingCount { get; set; }
