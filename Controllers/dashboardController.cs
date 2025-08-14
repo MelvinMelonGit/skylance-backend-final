@@ -51,7 +51,7 @@ namespace skylance_backend.Controllers
                 // overbooked flights today
                 var overbookedFlightsToday = db.FlightDetails
                     .Include(f => f.Aircraft)
-                    .Where(f => f.DepartureTime.Date == DateTime.Today &&
+                    .Where(f => f.DepartureTime.Date >= DateTime.Today &&
                     f.OverbookingCount > 0)
                     .Count();
 
