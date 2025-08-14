@@ -28,10 +28,13 @@ namespace skylance_backend.Controllers
                 .Include(f => f.OriginAirport)
                 .Include(f => f.DestinationAirport)
                 .Where(f => f.CheckInCount < f.Aircraft.SeatCapacity &&
-                            f.DepartureTime >= DateTime.Now)
+                f.DepartureTime >= DateTime.Now)
                 .Where (f => f.OriginAirport.IataCode == "NRT" && f.DestinationAirport.IataCode == "SIN")
                 .ToListAsync();
         }
+
+
+
 
         // GET: api/Flights/5
         [HttpGet("{id}")]
@@ -50,8 +53,39 @@ namespace skylance_backend.Controllers
 
             return flightDetail;
         }
+        
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<FlightDetail>>> GetFlightDetails(
+            [FromQuery] int originalFlightId
+        )
+        {
+            var currentTime = DateTime.Now;
+            var originalFlight = await _context.FlightDetails
+                .Include(f => f.OriginAirport)
+                .Include(f => f.DestinationAirport)
+                .FirstOrDefaultAsync(f => f.Id == originalFlightId);
 
-       
+            if (originalFlight == null)
+            {
+                return NotFound();
+            }
+
+            return await _context.FlightDetails
+                .Include(f => f.Aircraft)
+                .Include(f => f.OriginAirport)
+                .Include(f => f.DestinationAirport)
+                .Where(f => 
+                    f.Id != originalFlightId && 
+                    f.OriginAirport.Id == originalFlight.OriginAirport.Id && 
+                    f.DestinationAirport.Id == originalFlight.DestinationAirport.Id &&
+                    f.DepartureTime > currentTime &&
+                    f.CheckInCount < f.Aircraft.SeatCapacity)
+                .OrderBy(f => f.DepartureTime) 
+                .ToListAsync();
+}
+         
+
+
 
 
     }
