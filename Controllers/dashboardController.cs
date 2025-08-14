@@ -38,26 +38,15 @@ namespace skylance_backend.Controllers
 
             try
             {
-                // active flights now
-                //var startTime = new DateTime(2025, 8, 11, 14, 0, 0);
-                //var endTime = new DateTime(2025, 8, 11, 15, 0, 0);
-                var activeFlightsNow = db.FlightDetails
-                    .Count(f => f.DepartureTime <= DateTime.Now && f.ArrivalTime >= DateTime.Now);
-
-                // active flights yesterday as of now
-                var activeFlightsYesterdayNow = db.FlightDetails
-                    .Count(f => f.DepartureTime <= DateTime.Now.AddDays(-1) && f.ArrivalTime >= DateTime.Now.AddDays(-1));
-
-                // active flights - percentage change 
-                double trendActiveFlights;
-                if (activeFlightsYesterdayNow == 0)
-                {
-                    trendActiveFlights = activeFlightsNow > 0 ? 100 : 0;
-                }
-                else
-                {
-                    trendActiveFlights = ((double)(activeFlightsNow - activeFlightsYesterdayNow) / activeFlightsYesterdayNow) * 100;
-                }
+                // count number of flights which are available for check-in
+                var fightsOpenedForCheckIn = db.FlightDetails
+                    .Include(f => f.Aircraft)
+                    .Include(f => f.OriginAirport)
+                    .Include(f => f.DestinationAirport)
+                    .Where(f => f.CheckInCount <= f.Aircraft.SeatCapacity &&
+                    f.DepartureTime > DateTime.Now &&
+                    f.FlightStatus != "In-Flight")
+                    .Count();                          
 
                 // overbooked flights today
                 var overbookedFlightsToday = db.FlightDetails
@@ -132,8 +121,8 @@ namespace skylance_backend.Controllers
                 {
                     status = "success",
                     data = new
-                    {
-                        activeFlights = new { valueToday = activeFlightsNow, percentChange = Math.Round(trendActiveFlights,1).ToString("F1") + "%" },
+                    {   
+                        checkInFlights = fightsOpenedForCheckIn,
                         overbookedFlights = new { valueToday = overbookedFlightsToday, percentChange = Math.Round(trendOverbookedFlights,1).ToString("F1") + "%"},                        
                         totalPassengers = new { valueToday = totalPassengersToday, percentChange = Math.Round(trendTotalPassengers,1).ToString("F1") + "%"},
                         revenueToday = new { valueToday = revenueToday, percentChange = Math.Round(trendRevenue,1).ToString("F1") + "%"}
@@ -154,3 +143,25 @@ namespace skylance_backend.Controllers
         }
     }
 }
+
+
+
+/*                
+var activeFlightsNow = db.FlightDetails
+    .Count(f => f.DepartureTime <= DateTime.Now && f.ArrivalTime >= DateTime.Now);
+
+// active flights yesterday as of now
+var activeFlightsYesterdayNow = db.FlightDetails
+    .Count(f => f.DepartureTime <= DateTime.Now.AddDays(-1) && f.ArrivalTime >= DateTime.Now.AddDays(-1));
+
+// active flights - percentage change 
+double trendActiveFlights;
+if (activeFlightsYesterdayNow == 0)
+{
+    trendActiveFlights = activeFlightsNow > 0 ? 100 : 0;
+}
+else
+{
+    trendActiveFlights = ((double)(activeFlightsNow - activeFlightsYesterdayNow) / activeFlightsYesterdayNow) * 100;
+}
+*/
