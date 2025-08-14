@@ -28,7 +28,8 @@ namespace skylance_backend.Controllers
                 .Include(f => f.OriginAirport)
                 .Include(f => f.DestinationAirport)
                 .Where(f => f.CheckInCount < f.Aircraft.SeatCapacity &&
-                            f.DepartureTime >= DateTime.Now) 
+                            f.DepartureTime >= DateTime.Now)
+                .Where (f => f.OriginAirport.IataCode == "NRT" && f.DestinationAirport.IataCode == "SIN")
                 .ToListAsync();
         }
 

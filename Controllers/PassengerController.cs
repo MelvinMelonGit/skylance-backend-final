@@ -58,7 +58,13 @@ namespace skylance_backend.Controllers
                     Class = f.Class.ToString(),
                     MembershipTier = f.BookingDetail.AppUser.MembershipTier,
                     DateOfTravel = f.FlightDetail.DepartureTime,
-                    BookingStatus = f.BookingStatus.ToString(),
+                    BookingStatus = f.BookingStatus == BookingStatus.Confirmed && f.BookingStatus == BookingStatus.CheckedIn
+                                ? "Confirmed"
+                                : f.BookingStatus == BookingStatus.Cancelled
+                                ? "Cancelled"
+                                : f.BookingStatus == BookingStatus.Rebooked
+                                ? "Rebooked"
+                                : "No Show",
                     BaggageAllowance = f.BaggageAllowance.ToString(),
                     BaggageChecked = f.BaggageChecked.ToString(),
                     SeatNumber = f.SeatNumber != null ? f.SeatNumber.SeatNumber : null,
@@ -131,7 +137,13 @@ namespace skylance_backend.Controllers
                 {
                     PassengerName = f.BookingDetail.AppUser.FirstName + " " + f.BookingDetail.AppUser.LastName,
                     SeatNumber = f.SeatNumber != null ? f.SeatNumber.SeatNumber : null,
-                    BookingStatus = f.BookingStatus.ToString(),
+                    BookingStatus = f.BookingStatus == BookingStatus.Confirmed && f.BookingStatus == BookingStatus.CheckedIn
+                                ? "Confirmed"
+                                : f.BookingStatus == BookingStatus.Cancelled
+                                ? "Cancelled"
+                                : f.BookingStatus == BookingStatus.Rebooked
+                                ? "Rebooked"
+                                : "No Show",
                     CheckinStatus = f.BookingStatus == BookingStatus.CheckedIn
                                 ? "Checked-in"
                                 : f.BookingStatus == BookingStatus.Confirmed
