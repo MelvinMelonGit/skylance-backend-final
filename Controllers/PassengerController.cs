@@ -131,6 +131,7 @@ namespace skylance_backend.Controllers
                 {
                     PassengerName = f.BookingDetail.AppUser.FirstName + " " + f.BookingDetail.AppUser.LastName,
                     SeatNumber = f.SeatNumber != null ? f.SeatNumber.SeatNumber : null,
+                    BookingStatus = f.BookingStatus.ToString(),
                     CheckinStatus = f.BookingStatus == BookingStatus.CheckedIn
                                 ? "Checked-in"
                                 : f.BookingStatus == BookingStatus.Confirmed
