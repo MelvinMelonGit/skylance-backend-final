@@ -19,7 +19,7 @@ namespace skylance_backend.Controllers
         }
 
         // GET: api/Flights
-        
+        /*
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FlightDetail>>> GetFlightDetails()
         {
@@ -33,7 +33,7 @@ namespace skylance_backend.Controllers
                 .ToListAsync();
         }
 
-
+        */
 
 
         // GET: api/Flights/5
@@ -53,40 +53,75 @@ namespace skylance_backend.Controllers
 
             return flightDetail;
         }
-        
+        /*
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FlightDetail>>> GetFlightDetails(
-            [FromQuery] int originalFlightId
+        [FromQuery] int originalFlightId
+)
+{
+    var currentTime = DateTime.Now;
+    var originalFlight = await _context.FlightDetails
+        .Include(f => f.OriginAirport)
+        .Include(f => f.DestinationAirport)
+        .FirstOrDefaultAsync(f => f.Id == originalFlightId);
+
+       if (originalFlight == null)
+       {
+           return NotFound();
+       }
+
+       return await _context.FlightDetails
+           .Include(f => f.Aircraft)
+           .Include(f => f.OriginAirport)
+           .Include(f => f.DestinationAirport)
+           .Where(f => 
+               f.Id != originalFlightId && 
+               f.OriginAirport.Id == originalFlight.OriginAirport.Id && 
+               f.DestinationAirport.Id == originalFlight.DestinationAirport.Id &&
+               f.DepartureTime > currentTime &&
+               f.CheckInCount < f.Aircraft.SeatCapacity)
+           .OrderBy(f => f.DepartureTime) 
+           .ToListAsync();
+   }
+
+   */
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<FlightDetail>>> GetFlightDetails(
+            [FromQuery] string flightBookingDetailId  
         )
         {
             var currentTime = DateTime.Now;
-            var originalFlight = await _context.FlightDetails
-                .Include(f => f.OriginAirport)
-                .Include(f => f.DestinationAirport)
-                .FirstOrDefaultAsync(f => f.Id == originalFlightId);
 
-            if (originalFlight == null)
+            
+            var originalBooking = await _context.FlightBookingDetails
+                .Include(fbd => fbd.FlightDetail)
+                    .ThenInclude(fd => fd.OriginAirport)
+                .Include(fbd => fbd.FlightDetail)
+                    .ThenInclude(fd => fd.DestinationAirport)
+                .FirstOrDefaultAsync(fbd => fbd.Id == flightBookingDetailId);
+
+            if (originalBooking?.FlightDetail == null)
             {
-                return NotFound();
+                return NotFound("Flight booking not found");
             }
 
+            var originalFlight = originalBooking.FlightDetail;
+
+            
             return await _context.FlightDetails
                 .Include(f => f.Aircraft)
                 .Include(f => f.OriginAirport)
                 .Include(f => f.DestinationAirport)
-                .Where(f => 
-                    f.Id != originalFlightId && 
-                    f.OriginAirport.Id == originalFlight.OriginAirport.Id && 
+                .Where(f =>
+                    f.Id != originalFlight.Id && 
+                    f.OriginAirport.Id == originalFlight.OriginAirport.Id &&
                     f.DestinationAirport.Id == originalFlight.DestinationAirport.Id &&
                     f.DepartureTime > currentTime &&
                     f.CheckInCount < f.Aircraft.SeatCapacity)
-                .OrderBy(f => f.DepartureTime) 
+                .OrderBy(f => f.DepartureTime)
                 .ToListAsync();
-}
-         
-
-
-
+        }
 
     }
 
