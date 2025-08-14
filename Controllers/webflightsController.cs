@@ -94,7 +94,8 @@ namespace skylance_backend.Controllers
                 .Include(f => f.OriginAirport)
                 .Include(f => f.DestinationAirport)
                 .Where(f => f.CheckInCount <= f.Aircraft.SeatCapacity &&
-                f.DepartureTime > DateTime.Now);
+                f.DepartureTime > DateTime.Now &&
+                f.FlightStatus != "In-Flight");
 
             var totalItems = await query.CountAsync();
             var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
